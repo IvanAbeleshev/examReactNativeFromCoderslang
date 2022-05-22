@@ -1,29 +1,39 @@
-import React, {useEffect} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import * as Font from 'expo-font';
 
 export default function App() {
+  const[loadingFonts, setLoadingFonts] = useState(true);
   useEffect(()=>{
     const loadFonts = async ()=>{
-      Font.loadAsync()
       await Font.loadAsync({
-          // Load a font `Montserrat` from a static resource
-          Montserrat: require('./assets/fonts/Montserrat.ttf'),
+          'RobotoBold': require('./src/assets/fonts/Roboto/Roboto-Bold.ttf'),
+          'RobotoItalic': require('./src/assets/fonts/Roboto/Roboto-Italic.ttf'),
+          'RobotoRegular': require('./src/assets/fonts/Roboto/Roboto-Regular.ttf'),
+          'RobotoMedium': require('./src/assets/fonts/Roboto/Roboto-Medium.ttf'),
+      });
+    };
     
-          // Any string can be used as the fontFamily name. Here we use an object to provide more control
-          'Montserrat-SemiBold': {
-            uri: require('./assets/fonts/Montserrat-SemiBold.ttf'),
-            display: Font.FontDisplay.FALLBACK,
-          },
-        });
-      };
-    
-      loadFonts();
+    loadFonts();
+    setLoadingFonts(false);
     },[]);
 
   return (
-    <View styles={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <View styles={styles.container}> 
+      {loadingFonts? <ActivityIndicator textContent={'Loading...'} visible={loadingFonts} size={'small'} />:
+       <Text style={styles.textStyle}>Open up App.js to start working on your app!</Text>}
+
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container:{
+
+  },
+  textStyle:{
+    marginTop:50,
+    fontFamily: 'RobotoBold',
+  },
+
+})
